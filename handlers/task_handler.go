@@ -22,7 +22,22 @@ var (
 
 func init() {
 	// Soal No 4. Inisialisasikan 2 data task awal yang berisi ID, Title, Description, Status, dan CreatedAt.
-	tasks = []models.Task{}
+	tasks = []models.Task{
+		{
+			ID:          1,
+			Title:       "Belajar Go",
+			Description: "Mempelajari dasar-dasar bahasa Go",
+			Status:      "pending",
+			CreatedAt:   time.Now(),
+		},
+		{
+			ID:          2,
+			Title:       "Membuat REST API",
+			Description: "Implementasi REST API dengan Go standar library",
+			Status:      "in-progress",
+			CreatedAt:   time.Now(),
+		},
+	}
 	nextID = 4
 }
 
