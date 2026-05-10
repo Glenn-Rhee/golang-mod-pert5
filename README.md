@@ -1,21 +1,23 @@
-# 📋 Task Management API
+# Task Management API
 
 REST API sederhana untuk manajemen task, dibangun dengan **Go** dan terintegrasi dengan frontend berbasis **LitElement**. Semua logika bisnis dan akses data ditangani langsung di dalam layer handler.
 
 ---
 
-## 🗂️ Struktur Project
+## Struktur Project
 
 ```
 pert-5-v2/
 ├── go.mod
-├── main.go
-├── router/
-│   └── router.go          ← mapping URL ke handler
-├── handler/
+├── main.go                ← entry point & routing mapping URL ke handler
+├── middlewares/
+│   └── logger.go          ← middleware logging request
+├── handlers/
 │   └── task_handler.go    ← semua logika (storage, validasi, CRUD)
-├── model/
+├── models/
 │   └── task.go            ← definisi struct data
+├── utils/
+│   └── response.go        ← utility untuk standardisasi JSON response
 └── static/
     ├── index.html
     └── lit-all.min.js
@@ -23,24 +25,25 @@ pert-5-v2/
 
 ---
 
-## 🏗️ Arsitektur
+## Arsitektur
 
 Project ini menggunakan arsitektur sederhana — semua logika bisnis, validasi, dan akses data dihandle langsung di dalam **handler**:
 
 ```
-Router → Handler → Model
+Router (main.go) → Middleware → Handler → Model
 ```
 
-| Layer       | File                      | Tanggung Jawab                                                       |
-| ----------- | ------------------------- | -------------------------------------------------------------------- |
-| **Model**   | `model/task.go`           | Definisi struct `Task` dan `Response`                                |
-| **Handler** | `handler/task_handler.go` | In-memory storage, validasi input, logika CRUD, format JSON response |
-| **Router**  | `router/router.go`        | Mapping URL ke handler                                               |
-| **Main**    | `main.go`                 | Entry point — inisialisasi handler & menjalankan server              |
+| Layer           | File                       | Tanggung Jawab                                                       |
+| --------------- | -------------------------- | -------------------------------------------------------------------- |
+| **Model**       | `models/task.go`           | Definisi struct `Task`                                               |
+| **Handler**     | `handlers/task_handler.go` | In-memory storage, validasi input, logika CRUD, format JSON response |
+| **Middleware**  | `middlewares/logger.go`    | Intercept request untuk logging                                      |
+| **Utils**       | `utils/response.go`        | Utility untuk standardisasi JSON response                            |
+| **Main/Router** | `main.go`                  | Entry point — inisialisasi routing, middleware & menjalankan server  |
 
 ---
 
-## ⚙️ Teknologi
+## Teknologi
 
 - **Backend** : Go (net/http) — tanpa framework eksternal
 - **Frontend** : LitElement (Web Component)
@@ -49,7 +52,7 @@ Router → Handler → Model
 
 ---
 
-## 🚀 Cara Menjalankan
+## Cara Menjalankan
 
 ### Prasyarat
 
@@ -59,10 +62,10 @@ Router → Handler → Model
 
 ```bash
 # 1. Clone atau buat folder project
-mkdir task-api && cd task-api
+mkdir pert-5 && cd pert-5
 
 # 2. Inisialisasi Go module
-go mod init task-api
+go mod init pert-5
 
 # 3. Jalankan server
 go run main.go
@@ -72,7 +75,7 @@ Server berjalan di: `http://localhost:8080`
 
 ---
 
-## 📦 Model Data
+## Model Data
 
 ```go
 type Task struct {
@@ -94,7 +97,7 @@ type Task struct {
 
 ---
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### Base URL
 
@@ -257,7 +260,7 @@ DELETE /api/tasks/{id}
 
 ---
 
-## 🖥️ Frontend
+## Frontend
 
 Antarmuka web tersedia di `http://localhost:8080` dengan fitur:
 
@@ -291,15 +294,15 @@ Lalu ubah import map di `static/index.html`:
 
 ---
 
-## 📝 Catatan
+## Catatan
 
 - Data **tidak persisten** — akan reset setiap kali server di-restart karena menggunakan in-memory storage
 - Cocok digunakan untuk **pembelajaran** dan **demo**
-- Untuk production, pindahkan logika akses data dari `handler/task_handler.go` ke layer terpisah (misalnya repository dengan PostgreSQL atau MySQL)
+- Untuk production, pindahkan logika akses data dari `handlers/task_handler.go` ke layer terpisah (misalnya repository dengan PostgreSQL atau MySQL)
 
 ---
 
-## 👨‍💻 Dibuat untuk
+## Dibuat untuk
 
 **Pertemuan 5 — REST API Development & Frontend Integration (Lit UI)**  
 Web Application Development with Go

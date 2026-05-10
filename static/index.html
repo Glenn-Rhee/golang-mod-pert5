@@ -266,23 +266,43 @@
           }
           .task-actions {
           display: flex;
-          gap: 4px;
+          gap: 6px;
           }
           .btn-icon {
-            width: 28px;
-            height: 28px;
-            border: none;
-            background: #f3f4f6;
-            border-radius: 5px;
+            padding: 6px 12px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+
+            transition: all 0.2s ease;
+          }
+          /* Hover umum */
+          .btn-icon:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
           }
 
-          .btn-icon:hover {
-            background: #e5e7eb;
+          /* Edit */
+          .btn-icon.edit:hover {
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+            background: #eff6ff;
           }
+
+          /* Delete */
           .btn-icon.delete:hover {
-            background: #fee2e2;
+            color: #b91c1c;
+            border-color: #fecaca;
+            background: #fef2f2;
+          }
+
+          /* Active (klik) */
+          .btn-icon:active {
+            transform: scale(0.96);
           }
 
           /* ── MODAL EDIT ── */
@@ -467,7 +487,6 @@
       }
 
       // HELPERS
-
       showToast(message, type = 'success') {
         this.toast = { message, type };
         setTimeout(() => {
@@ -550,21 +569,21 @@
               <!-- STAT CARDS -->
               <div class="stats">
                 <div class="stat-card">
-                  <span class="stat-icon">📋</span>
+                  <span class="stat-icon"></span>
                   <div>
                     <div class="stat-num">${pending}</div>
                     <div class="stat-label">To Do</div>
                   </div>
                 </div>
                 <div class="stat-card">
-                  <span class="stat-icon">⚡</span>
+                  <span class="stat-icon"></span>
                   <div>
                     <div class="stat-num">${inProgress}</div>
                     <div class="stat-label">In Progress</div>
                   </div>
                 </div>
                 <div class="stat-card">
-                  <span class="stat-icon">✅</span>
+                  <span class="stat-icon"></span>
                   <div>
                     <div class="stat-num">${done}</div>
                     <div class="stat-label">Selesai</div>
@@ -619,7 +638,7 @@
                     <div class="task-list">
                       ${this.filteredTasks.length === 0
                 ? html`<div class="empty">
-                            Tidak ada task di sini 🎉
+                            Tidak ada task di sini
                           </div>`
                 : this.filteredTasks.map(
                   (task) => html`
@@ -632,8 +651,7 @@
                                       </div>`
                       : ''}
                                   <div class="task-meta">
-                                    <span class="badge ${task.status}">
-                                      ${this.badgeIcon(task.status)}
+                                    <span class="badge ${task.status}"> 
                                       ${this.badgeLabel(task.status)}
                                     </span>
                                     <span class="task-date"
@@ -643,19 +661,17 @@
                                 </div>
                                 <div class="task-actions">
                                   <button
-                                    class="btn-icon"
-                                    title="Edit"
-                                    @click=${() =>
-                      (this.editingTask = { ...task })}
+                                    class="btn-icon edit"
+                                    @click=${() => (this.editingTask = { ...task })}
                                   >
-                                    ✏️
+                                    Edit
                                   </button>
+
                                   <button
                                     class="btn-icon delete"
-                                    title="Hapus"
                                     @click=${() => this.deleteTask(task.id)}
                                   >
-                                    🗑️
+                                    Hapus
                                   </button>
                                 </div>
                               </div>
@@ -675,7 +691,7 @@
               }}
                   >
                     <div class="modal">
-                      <h3>✏️ Edit Task</h3>
+                      <h3>Edit Task</h3>
                       <form class="modal-form" @submit=${this._onEditSubmit}>
                         <input
                           type="text"
@@ -691,9 +707,9 @@
                           .value=${this.editingTask.description ?? ''}
                         />
                         <select name="status" .value=${this.editingTask.status}>
-                          <option value="pending">📋 To Do</option>
-                          <option value="in-progress">⚡ In Progress</option>
-                          <option value="done">✅ Selesai</option>
+                          <option value="pending">To Do</option>
+                          <option value="in-progress">In Progress</option>
+                          <option value="done">Selesai</option>
                         </select>
                         <div class="modal-actions">
                           <button
