@@ -1,17 +1,6 @@
 package handlers
 
 // Soal No 3. Import package encoding/json, errors, net/http, pert-5/models, strconv, strings, sync, time
-import (
-	"encoding/json"
-	"errors"
-	"net/http"
-	"pert-5/models"
-	"pert-5/utils"
-	"strconv"
-	"strings"
-	"sync"
-	"time"
-)
 
 // In-memory storage
 var (
@@ -23,39 +12,17 @@ var (
 func init() {
 	// Soal No 4. Inisialisasikan 2 data task awal yang berisi ID, Title, Description, Status, dan CreatedAt.
 	tasks = []models.Task{
-		{
-			ID:          1,
-			Title:       "Belajar Go",
-			Description: "Mempelajari dasar-dasar bahasa Go",
-			Status:      "pending",
-			CreatedAt:   time.Now(),
-		},
-		{
-			ID:          2,
-			Title:       "Membuat REST API",
-			Description: "Implementasi REST API dengan Go standar library",
-			Status:      "in-progress",
-			CreatedAt:   time.Now(),
-		},
+		
 	}
 	nextID = 4
 }
 
 // Soal No. 5. Inisialisasi validStatuses map[string]bool
-var validStatuses = map[string]bool{
-	"pending":     true,
-	"in-progress": true,
-	"done":        true,
-}
+
 
 // GET /api/tasks
 // Soal No 6A. Implementasikan handler GetAll untuk mengambil semua task.
-func GetAll(w http.ResponseWriter, r *http.Request) {
-	mu.Lock()
-	defer mu.Unlock()
 
-	utils.WriteJSON(w, http.StatusOK, "success", "Data retrieved successfully", tasks)
-}
 
 // POST /api/tasks
 // Mengimplementasikan handler Create untuk membuat task baru.
@@ -90,19 +57,7 @@ func Create(w http.ResponseWriter, r *http.Request) {
 	// Soal No 6B. Lengkapi kode berikut untuk membuat objek Task baru menggunakan struct models.Task.
 	// Isi field ID dengan nextID, Title dengan input.Title, Description dengan input.Description,
 	// Status dengan input.Status, dan CreatedAt dengan waktu saat ini.
-	task := models.Task{
-		ID:          nextID,
-		Title:       input.Title,
-		Description: input.Description,
-		Status:      input.Status,
-		CreatedAt:   time.Now(),
-	}
 
-	nextID++
-	tasks = append(tasks, task)
-	mu.Unlock()
-
-	utils.WriteJSON(w, http.StatusCreated, "success", "Task berhasil dibuat", task)
 }
 
 // PUT /api/tasks/{id}
@@ -129,15 +84,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 	input.Description = strings.TrimSpace(input.Description)
 
 	// Soal No 6C. Buatlah validasi untuk memastikan field Title tidak kosong.
-	if input.Title == "" {
-		utils.WriteJSON(w, http.StatusBadRequest, "error", "title wajib diisi", nil)
-		return
-	}
 
-	if input.Status != "" && !validStatuses[input.Status] {
-		utils.WriteJSON(w, http.StatusBadRequest, "error", "status tidak valid, gunakan: pending | in-progress | done", nil)
-		return
-	}
 
 	mu.Lock()
 	defer mu.Unlock()
@@ -175,10 +122,7 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(idStr)
 
 	// Soal No 6D. Buatlah validasi untuk memastikan nilai ID yang diterima valid.
-	if err != nil || id <= 0 {
-		utils.WriteJSON(w, http.StatusBadRequest, "error", "ID tidak valid", nil)
-		return
-	}
+
 
 	mu.Lock()
 	defer mu.Unlock()
